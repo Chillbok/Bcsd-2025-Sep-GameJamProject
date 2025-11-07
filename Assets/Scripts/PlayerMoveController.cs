@@ -2,17 +2,20 @@ using UnityEngine;
 
 public class PlayerMoveController : MonoBehaviour
 {
+    private PlayerManager playerManager;
     public float moveSpeed = 5f;
     public float jumpForce = 10f; // 점프 힘
     public bool FacingRight { get; private set; } = true; //플레이어가 바라보는 방향이 오른쪽인가?
-    public bool canMove = true;
-
 
     private Rigidbody2D rb;
     private Animator animator; // Animator 컴포넌트 참조
 
+    //플레이어 이동 가능 여부
+    public bool canMove = true;
+
     void Start()
     {
+        playerManager = GetComponent<PlayerManager>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>(); // Animator 컴포넌트 초기화
     }
@@ -22,7 +25,7 @@ public class PlayerMoveController : MonoBehaviour
         //플레이어 이동 변수들
         float moveX = Input.GetAxis("Horizontal");
 
-        if (!canMove)
+        if (canMove == false)
         {
             moveX = 0;
         }

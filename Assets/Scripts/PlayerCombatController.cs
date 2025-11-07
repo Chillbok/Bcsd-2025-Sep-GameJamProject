@@ -13,6 +13,10 @@ public class PlayerCombatController : MonoBehaviour
     public bool isDashing = false;
     private bool isAttacking = false;
 
+    //전투 행동 조절하는 bool 값들
+    public bool canDash = true;
+    public bool canAttack = true;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,38 +33,40 @@ public class PlayerCombatController : MonoBehaviour
             return; // 대시 또는 공격 중에는 입력을 무시
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (canAttack == true && Input.GetMouseButtonDown(0))
         {
             StartCoroutine(Attack());
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (canDash == true && Input.GetMouseButtonDown(1))
         {
             StartCoroutine(Dash());
         }
     }
 
+    //대쉬 행동
     IEnumerator Dash()
     {
-        isDashing = true;
+        canDash = false;
         animator.SetTrigger("dash");
         float dashDirection = moveController.FacingRight ? 1 : -1;
         rb.AddForce(new Vector2(dashDirection * dashForce, 0), ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(dashDuration);
 
-        isDashing = false;
+        canDash = true;
     }
 
+    //공격 행동
     IEnumerator Attack()
     {
-        isAttacking = true;
+        canAttack = false;
         moveController.canMove = false;
         animator.SetTrigger("attack");
 
         yield return new WaitForSeconds(attackDuration);
 
         moveController.canMove = true;
-        isAttacking = false;
+        canAttack = true;
     }
 }

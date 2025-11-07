@@ -10,7 +10,7 @@ public class PlayerCombatController : MonoBehaviour
     public float dashForce = 20f;
     public float dashDuration = 0.5f; // 대시 후 입력 무시 시간
     public float attackDuration = 0.5f; // 공격 후 입력 무시 시간
-    private bool isDashing = false;
+    public bool isDashing = false;
     private bool isAttacking = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     private PlayerCombatController playerCombatController;
+    [SerializeField] GameManager gameManager;
     private Animator animator;
     public float currentHP;
 
@@ -22,5 +23,10 @@ public class PlayerManager : MonoBehaviour
             currentHP -= damage;
             if (currentHP <= 0) {currentHP = 0;}
         }
+    }
+
+    void Death()
+    {
+        gameManager.isGameOver = true;
     }
 }

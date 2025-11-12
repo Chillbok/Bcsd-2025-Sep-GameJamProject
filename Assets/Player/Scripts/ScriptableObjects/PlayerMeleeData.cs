@@ -17,6 +17,5 @@ public class PlayerMeleeData : ScriptableObject
     [Header("콤보 정보")]
     public float BeforeHitboxActivate = 0f;
     public float timeBeforeHitboxActivate = 0f; 
-    public float comboTimeBeforeAnimationEnd = 0.3f; //애니메이션 끝나기 전 콤보 입력 가능 시간
     public float comboTimeAfterAnimationEnd = 0.2f; //애니메이션 끝난 후 콤보 입력 가능 시간
 }

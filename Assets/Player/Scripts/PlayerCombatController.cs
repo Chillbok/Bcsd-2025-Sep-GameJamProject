@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -73,25 +72,30 @@ public class PlayerCombatController : MonoBehaviour
     {
         //콤보 인식 시간 동안 공격 버튼을 눌렀는가?
         bool pressedAttack = false;
+        float[] animLengths = new float[] { meleeData.beforeHitboxOnAnimClip.length, meleeData.whileHitboxOnAnimClip.length, meleeData.afterHitboxOnAnimClip.length };
 
         canAttack = false;
         moveController.canMove = false;
         animator.SetTrigger("attack");
 
-        //애니메이션 지속시간동안 멈추기
-        yield return new WaitForSeconds(meleeData.animationClip.length - meleeData.comboTimeBeforeAnimationEnd);
+        //히트박스 켜지기 전까지 기다리기
+        yield return new WaitForSeconds(animLengths[0]);
 
-        //애니메이션 끝나기 전 콤보 입력 가능 시간 동안 실행할 코드들
-        if (Input.GetMouseButton(0)) { pressedAttack = true; }
+        //여기에 히트박스 켜는 코드 추가
+
+        //히트박스 지속시간동안 기다리기
+        yield return new WaitForSeconds(animLengths[1]);
+
+        //히트박스 꺼진 후 애니메이션 재생시간 기다리기
+        yield return new WaitForSeconds(animLengths[2]);
 
         //애니메이션 끝남, 콤보 입력 가능 시간 기다리기
-        yield return new WaitForSeconds(meleeData.comboTimeBeforeAnimationEnd);
-
-        //애니메이션 끝난 후 콤보 입력 가능 시간 동안 실행할 코드들
+        yield return new WaitForSeconds(meleeData.comboTimeAfterAnimationEnd);
         if (Input.GetMouseButton(0)) { pressedAttack = true; }
 
         //콤보 입력 가능 시간 끝난 후 실행할 코드들
         if (pressedAttack == false || (pressedAttack == true && meleeComboCounter == 2)) { meleeComboCounter = 0; }
+        else { meleeComboCounter++; }
 
         //플레이어 다시 움직일 수 있도록 상태 변환
         moveController.canMove = true;
